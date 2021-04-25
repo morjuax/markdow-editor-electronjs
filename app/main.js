@@ -2,9 +2,19 @@ const {app, BrowserWindow} = require('electron');
 
 let mainWindow = null;
 
-app.on('ready', async () => {
-    mainWindow = new BrowserWindow();
-    await mainWindow.loadFile(__dirname + '/index.html');
+app.on('ready', () => {
+    mainWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
+    });
+    mainWindow.loadFile(__dirname + '/index.html');
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+        // mainWindow.webContents.openDevTools();
+    })
     mainWindow.on('closed', () => {
         mainWindow = null;
     })
